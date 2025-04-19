@@ -8,13 +8,13 @@ const BASE_PATH = (location.hostname === "localhost" || location.hostname === "1
   ? "/"                 
   : "/website/";        
 
-const pages = [
-  { url: 'index.html', title: 'home' },
-  { url: 'projects/index.html', title: 'project' },
-  { url: 'contact/index.html', title: 'contact' },
-  { url: 'resume/index.html', title: 'resume' },
-  { url: 'https://github.com/j2nnifer', title: 'github' }
-];
+  const pages = [
+    { url: './index.html', title: 'home' },
+    { url: './projects/index.html', title: 'project' },
+    { url: './contact/index.html', title: 'contact' },
+    { url: './resume/index.html', title: 'resume' },
+    { url: 'https://github.com/j2nnifer', title: 'github' }
+  ];
 
 function createNavigation() {
   const nav = document.createElement('nav');
