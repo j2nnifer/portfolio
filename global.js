@@ -8,12 +8,12 @@ const BASE_PATH = (location.hostname === "localhost" || location.hostname === "1
   ? "/"                 
   : "/website/";        
 
-  const pages = [
-    { url: './index.html', title: 'home' },
-    { url: './projects/index.html', title: 'project' },
-    { url: './contact/index.html', title: 'contact' },
-    { url: './resume/index.html', title: 'resume' },
-    { url: 'https://github.com/j2nnifer', title: 'github' }
+  let pages = [
+    { url: '', title: 'home' },
+    { url: 'projects/', title: 'project' },
+    { url: 'contact/', title: 'contact' },
+    { url: 'resume/', title: 'resume' },
+    { url: 'https://github.com/j2nnifer', title: 'github', target: '_blank' }
   ];
 
 function createNavigation() {
@@ -92,3 +92,42 @@ document.addEventListener('DOMContentLoaded', function() {
   createNavigation();
   createColorSchemeSwitch();
 });
+
+
+export async function fetchJSON(url) {
+  try {
+    // Fetch the JSON file from the given URL
+    const response = await fetch(url);
+    if (!response.ok) {
+      throw new Error(`Failed to fetch projects: ${response.statusText}`);
+    }
+    
+    console.log(response);
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    console.error('Error fetching or parsing JSON data:', error);
+  }
+}
+
+export function renderProjects(project, containerElement, headinglevel = 'h2') {
+  containerElement.innerHTML = '';
+
+  const article = document.createElement('article');
+
+  projects.forEach(project => {
+    const article = document.createElement('article')
+    
+    article.innerHTML = `
+    <h3>${project.title}</h3>
+    <img src="${project.image}" alt="${project.title}">
+    <p>${project.description}</p>
+`;
+
+containerElement.appendChild(article);
+  });
+  
+
+  
+}
+
