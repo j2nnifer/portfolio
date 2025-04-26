@@ -1,62 +1,62 @@
 [
     {
-        "title": "Lorem ipsum dolor sit.",
-        "image": "https://vis-society.github.io/labs/2/images/empty.svg",
-        "description": "Lorem ipsum dolor, sit amet consectetur adipisicing elit. Ullam pariatur voluptatibus quod, ut odit nostrum harum sit, ratione labore consequuntur sapiente illum veritatis, deleniti tempore incidunt. Ab a similique iure!"
+        "title": "Grocery Visualization",
+        "image": "images/grocery.png",
+        "description": "A visualization with grocery dataset seeing how cholesterol and fat are correlated."
     },
     {
-        "title": "Molestiae omnis ab inventore.",
-        "image": "https://vis-society.github.io/labs/2/images/empty.svg",
-        "description": "Est incidunt labore, numquam in expedita doloribus odio facilis ratione veritatis sint velit. Amet blanditiis laboriosam voluptatibus nisi neque similique modi placeat consectetur ducimus. Dicta, eveniet. Ipsa repudiandae exercitationem temporibus."
+        "title": "Data on Recipes",
+        "image": "images/recipes.png",
+        "description": "Using dataset with recipes to see how cooking time correlates with ratings."
     },
     {
-        "title": "Nulla quo tenetur expedita.",
-        "image": "https://vis-society.github.io/labs/2/images/empty.svg",
-        "description": "Delectus cum excepturi soluta eveniet similique veritatis quam voluptatum non ut aperiam autem et corrupti iste itaque atque molestias architecto adipisci, earum tempora quia expedita quod placeat debitis? Accusantium, pariatur."
+        "title": "Dinosaur Hackathon",
+        "image": "images/dinosaurs.png",
+        "description": "A hackathon to see how populized areas were during the era of dinosaurs."
     },
     {
-        "title": "Accusantium numquam quis perferendis!",
+        "title": "Example Project",
         "image": "https://vis-society.github.io/labs/2/images/empty.svg",
-        "description": "Repudiandae nemo suscipit vel dolorum possimus reiciendis quae. Ex, ipsa. Ea itaque magnam laborum quasi minima magni doloribus tempora quibusdam voluptate error at quisquam rem, in, ipsum omnis ad debitis."
+        "description": "Filler text"
     },
     {
-        "title": "Esse animi non possimus.",
+        "title": "Example Project",
         "image": "https://vis-society.github.io/labs/2/images/empty.svg",
-        "description": "Perspiciatis asperiores eaque hic voluptatem doloremque adipisci repudiandae ad. Ab obcaecati aspernatur, deleniti similique in necessitatibus, modi doloribus ad maxime eos nostrum eum architecto quia dolor doloremque inventore atque. Culpa!"
+        "description": "Filler text"
     },
     {
-        "title": "Facere aut dolorum esse.",
+        "title": "Example Project",
         "image": "https://vis-society.github.io/labs/2/images/empty.svg",
-        "description": "Est, magni unde? Beatae ea facere nisi placeat nemo quis aut sit similique vitae nihil ipsum quo aliquid corporis, sint nam minima illo blanditiis omnis cum voluptates! Aut, sint quaerat!"
+        "description": "Filler text"
     },
     {
-        "title": "Aliquid dolorum eos modi?",
+        "title": "Example Project",
         "image": "https://vis-society.github.io/labs/2/images/empty.svg",
-        "description": "Reiciendis, voluptatibus voluptate, totam voluptates odit cumque dolores esse tenetur non maxime aliquid fugit nemo quas dolorem enim nulla minus explicabo, velit veniam consectetur voluptatem optio? Quos repudiandae repellat impedit."
+        "description": "Filler text"
     },
     {
-        "title": "Rerum est deserunt iste.",
+        "title": "Example Project",
         "image": "https://vis-society.github.io/labs/2/images/empty.svg",
-        "description": "Similique qui sint repellendus molestias quaerat, nihil tenetur debitis doloribus. Delectus corrupti, omnis incidunt accusantium illo necessitatibus fugiat impedit aperiam similique expedita nesciunt doloremque quibusdam nostrum. Ab sed veniam excepturi?"
+        "description": "Filler text"
     },
     {
-        "title": "Reprehenderit facilis dolor explicabo.",
+        "title": "Example Project",
         "image": "https://vis-society.github.io/labs/2/images/empty.svg",
-        "description": "Officiis provident dolores iusto autem optio. A dignissimos perspiciatis adipisci minima architecto nesciunt. Nemo accusamus odit beatae consequuntur! Culpa maxime molestiae itaque, quisquam blanditiis non quas soluta amet laboriosam. Id."
+        "description": "Filler text"
     },
     {
-        "title": "Laudantium totam non recusandae?",
+        "title": "Example Project",
         "image": "https://vis-society.github.io/labs/2/images/empty.svg",
-        "description": "Sequi necessitatibus est ratione error laborum voluptatibus? Soluta facilis unde possimus assumenda tempore atque mollitia optio excepturi, quos quibusdam nesciunt, asperiores similique! Ullam nostrum doloremque odio, quos dicta minus omnis."
+        "description": "Filler text"
     },
     {
-        "title": "Officia ratione veniam magnam?",
+        "title": "Example Project",
         "image": "https://vis-society.github.io/labs/2/images/empty.svg",
-        "description": "Aperiam ipsam ab impedit voluptatem nobis eius doloremque iste nostrum quo, libero doloribus ea aut optio, quisquam molestias asperiores quia, sit in laudantium laboriosam eveniet? Sed sint ratione voluptatum iusto."
+        "description": "Filler text"
     },
     {
-        "title": "Error expedita molestiae pariatur!",
+        "title": "Example Project",
         "image": "https://vis-society.github.io/labs/2/images/empty.svg",
-        "description": "Iusto voluptatem illo atque dolores dolorum et. Incidunt tempore animi aliquam amet rerum natus sit facilis blanditiis expedita beatae similique neque pariatur a fugit possimus sunt recusandae, enim quo molestias."
+        "description": "Filler text"
     }
 ]
