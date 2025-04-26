@@ -108,13 +108,13 @@ export async function fetchGithubData(username) {
 export function renderProjects(project, containerElement, headinglevel = 'h2') {
   containerElement.innerHTML = '';
 
-  project.forEach(project => {
+  project.forEach(p => {
     const article = document.createElement('article')
     
     article.innerHTML = `
-    <h3>${project.title}</h3>
-    <img src="${project.image}" alt="${project.title}">
-    <p>${project.description}</p>
+    <h3>${p.title}</h3>
+    <img src="${p.image}" alt="${p.title}">
+    <p>${p.description}</p>
     `;
 
     containerElement.appendChild(article);
