@@ -18,7 +18,6 @@ const BASE_PATH = (location.hostname === "localhost" || location.hostname === "1
 
 function createNavigation() {
   const nav = document.createElement('nav');
-  
   const ul = document.createElement('ul');
   nav.appendChild(ul);
   
@@ -131,3 +130,7 @@ containerElement.appendChild(article);
   
 }
 
+export async function fetchGitHubData(username) {
+  // return statement here
+  return fetchJSON(`https://api.github.com/users/${username}`);
+}
