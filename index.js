@@ -1,7 +1,7 @@
 import { fetchJSON, renderProjects, fetchGithubData } from './global.js';
 
 
-async function displayLatestProjects() {
+async function latestprojs() {
     const projectsContainer = document.querySelector('.projects');
   
     const projects = await fetchJSON('./lib/projects.json');
@@ -11,7 +11,7 @@ async function displayLatestProjects() {
   }
 
 
-  async function displayGithubStats() {
+  async function ghstats() {
     const profileStats = document.querySelector('#profile-stats');
     if (profileStats) {
       const githubData = await fetchGitHubData('j2nnifer');
@@ -40,5 +40,5 @@ async function displayLatestProjects() {
   }
   
 
-  displayGithubStats();
-  displayLatestProjects();
+  ghstats();
+  latestprojs();
