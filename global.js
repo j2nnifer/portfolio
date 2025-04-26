@@ -109,6 +109,11 @@ export async function fetchJSON(url) {
   }
 }
 
+export async function fetchGitHubData(username) {
+  // return statement here
+  return fetchJSON(`https://api.github.com/users/${username}`);
+}
+
 export function renderProjects(project, containerElement, headinglevel = 'h2') {
   containerElement.innerHTML = '';
 
@@ -129,7 +134,3 @@ export function renderProjects(project, containerElement, headinglevel = 'h2') {
   
 }
 
-export async function fetchGitHubData(username) {
-  // return statement here
-  return fetchJSON(`https://api.github.com/users/${username}`);
-}

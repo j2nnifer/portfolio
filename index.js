@@ -1,4 +1,4 @@
-import { fetchJSON, renderProjects, fetchGithubData } from './global.js';
+import {    fetchJSON, renderProjects, fetchGithubData } from './global.js';
 
 
 async function latestprojs() {
@@ -11,10 +11,10 @@ async function latestprojs() {
   }
 
 
-  async function ghstats() {
+async function ghstats() {
     const profileStats = document.querySelector('#profile-stats');
     if (profileStats) {
-      const githubData = await fetchGitHubData('j2nnifer');
+      const githubData = await fetchGithubData('j2nnifer');
       profileStats.innerHTML = `
         <h3>My GitHub Stats</h3>
         <div class="github-stats-grid">
