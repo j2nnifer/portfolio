@@ -184,4 +184,5 @@ label {
 .container {
   display: flex;
   gap: 1.5em; 
+  align-items: center
 }
