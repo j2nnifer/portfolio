@@ -15,16 +15,12 @@ const titleElement = document.querySelector('.projects-title');
     }
 
   
+let svg = d3.select('svg');
 
-let arc = d3.arc().innerRadius(0).outerRadius(50)({
-  startAngle: 0,
-  endAngle: 2 * Math.PI,
-});
+let arcGenerator = d3.arc().innerRadius(0).outerRadius(50);
 
-d3.select('svg').append('path').attr('d', arc).attr('fill', 'red');
 
 let data = [1, 2];
-
 let total = 0;
 
 for (let d of data) {
