@@ -137,3 +137,11 @@ label {
 .resume article ul li {
   margin-bottom: 0.4em;
 }
+
+/* lab 5 */
+
+#projects-pie-plot {
+  max-width: 20em;
+  margin-block: 2em;
+  overflow: visible;
+}
