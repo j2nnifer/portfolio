@@ -31,6 +31,7 @@ let data = rolledData.map(([year, count]) => {
   return { value: count, label: year };
 });
 
+let arcGenerator = d3.arc().innerRadius(0).outerRadius(50);
 let total = 0;
 let sliceGenerator = d3.pie().value((d) => d.value);
 let arcData = sliceGenerator(data);
