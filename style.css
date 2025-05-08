@@ -145,3 +145,32 @@ label {
   margin-block: 2em;
   overflow: visible;
 }
+
+/* Legend container styles */
+.legend {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(9em, 1fr));
+  gap: 1em;
+  border: 1px solid#ccc;
+  padding: 1em;
+  margin-top: 2em;
+  background: #f9f9f9;
+  border-radius: 8px;
+}
+
+/* Each item in the legend */
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 0.5em;
+  font-size: 0.9em;
+}
+
+/* Swatch styles */
+.swatch {
+  display: inline-block;
+  width: 1em;
+  height: 1em;
+  background-color: var(--color);
+  border-radius: 4px; /* Use 50% for a circle */
+}
