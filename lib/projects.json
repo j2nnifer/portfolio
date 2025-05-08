@@ -2,19 +2,19 @@
     {
         "title": "Grocery Visualization",
         "year": "2025",
-        "image": "images/grocery.png",
+        "image": "../images/grocery.png",
         "description": "A visualization with grocery dataset seeing how cholesterol and fat are correlated."
     },
     {
         "title": "Data on Recipes",
         "year": "2025",
-        "image": "images/recipes.png",
+        "image": "../images/recipes.png",
         "description": "Using dataset with recipes to see how cooking time correlates with ratings."
     },
     {
         "title": "Dinosaur Hackathon",
         "year": "2023",
-        "image": "images/dinosaurs.png",
+        "image": "../images/dinosaurs.png",
         "description": "A hackathon to see how populized areas were during the era of dinosaurs."
     },
     {
