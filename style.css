@@ -157,6 +157,7 @@ label {
 .legend {
   display: grid;
   flex: 1;
+  min-width: 12em;
   grid-template-columns: repeat(auto-fill, minmax(9em, 1fr));
   gap: 1em;
   border: 1px solid#ccc;
@@ -182,5 +183,5 @@ label {
 
 .container {
   display: flex;
-  gap: 1.5 em; 
+  gap: 1.5em; 
 }
