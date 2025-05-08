@@ -151,6 +151,7 @@ label {
   max-width: 20em;
   margin-block: 2em;
   overflow: visible;
+  flex: 1;
 }
 
 /* Legend container styles */
