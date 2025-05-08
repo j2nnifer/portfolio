@@ -28,7 +28,7 @@ let data = [
   { value: 5, label: 'cherries' },
 ];
 let total = 0;
-let sliceGenerator = d3.pie();
+let sliceGenerator = d3.pie().value((d) => d.value);
 let arcData = sliceGenerator(data);
 let arcs = arcData.map((d) => arcGenerator(d));
 
