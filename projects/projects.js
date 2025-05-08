@@ -17,18 +17,26 @@ const titleElement = document.querySelector('.projects-title');
   
 let svg = d3.select('svg');
 
-let arcGenerator = d3.arc().innerRadius(0).outerRadius(50);
 
 
-let data = [1, 2, 3, 4, 5, 5];
+let data = [
+  { value: 1, label: 'apples' },
+  { value: 2, label: 'oranges' },
+  { value: 3, label: 'mangos' },
+  { value: 4, label: 'pears' },
+  { value: 5, label: 'limes' },
+  { value: 5, label: 'cherries' },
+];
 let total = 0;
+let sliceGenerator = d3.pie();
+let arcData = sliceGenerator(data);
+let arcs = arcData.map((d) => arcGenerator(d));
 
 for (let d of data) {
   total += d;
 }
 
 let angle = 0;
-let arcData = [];
 
 for (let d of data) {
   let endAngle = angle + (d / total) * 2 * Math.PI;
@@ -36,7 +44,6 @@ for (let d of data) {
   angle = endAngle;
 }
 
-let arcs = arcData.map((d) => arcGenerator(d));
 
 let colors = d3.scaleOrdinal(d3.schemeTableau10);
 arcs.forEach((arc, idx) => {
@@ -45,3 +52,5 @@ arcs.forEach((arc, idx) => {
     .attr('d', arc)
     .attr('fill', colors(idx)) 
 });
+
+
