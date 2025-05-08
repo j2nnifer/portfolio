@@ -179,3 +179,8 @@ label {
   background-color: var(--color);
   border-radius: 50%;
 }
+
+.container {
+  display: flex;
+  gap: 1.5 em; 
+}
