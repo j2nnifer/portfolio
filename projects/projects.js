@@ -4,6 +4,7 @@ import * as d3 from 'https://cdn.jsdelivr.net/npm/d3@7.9.0/+esm';
 const myprojects = await fetchJSON('../lib/projects.json');
 let projects = myprojects;
 let selectedIndex = -1;
+let searchQuery = '';
 
 const projectsContainer = document.querySelector('.projects');
 const svg = d3.select('svg');
@@ -35,13 +36,7 @@ function renderPieChart(projectsGiven) {
       selectedIndex = selectedIndex === i ? -1 : i;
       updateStyles(newData);
 
-      if (selectedIndex === -1) {
-        renderProjects(projects, projectsContainer, 'h2');
-      } else {
-        const selectedYear = newData[selectedIndex].label;
-        const filtered = projects.filter(p => p.year === selectedYear);
-        renderProjects(filtered, projectsContainer, 'h2');
-      }
+      renderFilteredProjects();
     });
 
   // Render legend
@@ -56,19 +51,11 @@ function renderPieChart(projectsGiven) {
       selectedIndex = selectedIndex === i ? -1 : i;
       updateStyles(newData);
 
-      if (selectedIndex === -1) {
-        renderProjects(projects, projectsContainer, 'h2');
-      } else {
-        const selectedYear = newData[selectedIndex].label;
-        const filtered = projects.filter(p => p.year === selectedYear);
-        renderProjects(filtered, projectsContainer, 'h2');
-      }
+      renderFilteredProjects();
     });
 
   updateStyles(newData);
 }
-
-let searchQuery = '';
 
 function updateStyles(data) {
   svg.selectAll('path')
@@ -79,18 +66,24 @@ function updateStyles(data) {
     .attr('class', (_, i) => (i === selectedIndex ? 'selected' : ''));
 }
 
+function renderFilteredProjects() {
+  const selectedYear = selectedIndex !== -1 ? d3.pie().value(d => d.value)(d3.rollups(projects, v => v.length, d => d.year))[selectedIndex].data.label : null;
+
+  const filteredProjects = projects.filter(project => {
+    const matchesSearchQuery = Object.values(project).join('\n').toLowerCase().includes(searchQuery.toLowerCase());
+    const matchesYear = selectedYear ? project.year === selectedYear : true;
+    return matchesSearchQuery && matchesYear;
+  });
+
+  renderProjects(filteredProjects, projectsContainer, 'h2');
+}
+
 // Initial load
 renderProjects(projects, projectsContainer, 'h2');
 renderPieChart(projects);
 
 // Handle search
-document.querySelector('.searchBar').addEventListener('change', (event) => {
-  const value = event.target.value.toLowerCase();
-  const filtered = projects.filter(project =>
-    Object.values(project).join('\n').toLowerCase().includes(value)
-  );
-
-  selectedIndex = -1; // clear selection on search
-  renderProjects(filtered, projectsContainer, 'h2');
-  renderPieChart(filtered);
+document.querySelector('.searchBar').addEventListener('input', (event) => {
+  searchQuery = event.target.value;
+  renderFilteredProjects(); // Update projects based on both search and selected pie chart slice
 });
