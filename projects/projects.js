@@ -53,23 +53,26 @@ function renderPieChart(projectsGiven) {
     .style('opacity', (_, i) => (selectedIndex === -1 || i === selectedIndex ? 1 : 0.5));
 
   // Render legend
-  newData.forEach((d, i) => {
-    legend.append('li')
-      .attr('style', `--color:${colors(i)}`)
-      .html(`<span class="swatch"></span> ${d.label} <em>(${d.value})</em>`)
-      .style('cursor', 'pointer')
-      .on('click', () => {
-        selectedIndex = selectedIndex === i ? -1 : i;
-        updateStyles(newData);
+  legend.selectAll('li')
+  .data(newData)
+  .enter()
+  .append('li')
+  .attr('style', (_, i) => `--color:${colors(i)}`)
+  .html(d => `<span class="swatch"></span> ${d.label} <em>(${d.value})</em>`)
+  .style('cursor', 'pointer')
+  .on('click', (event, d, i) => {
+    selectedIndex = selectedIndex === i ? -1 : i;
+    updateStyles(newData);
 
-        if (selectedIndex === -1) {
-          renderProjects(projects, projectsContainer, 'h2');
-        } else {
-          const selectedYear = newData[selectedIndex].label;
-          const filtered = projects.filter(p => p.year === selectedYear);
-          renderProjects(filtered, projectsContainer, 'h2');
-        }
-      });
+    if (selectedIndex === -1) {
+      renderProjects(projects, projectsContainer, 'h2');
+    } else {
+      const selectedYear = newData[selectedIndex].label;
+      const filtered = projects.filter(p => p.year === selectedYear);
+      renderProjects(filtered, projectsContainer, 'h2');
+    }
+
+    renderPieChart(projects);
   });
 
   updateStyles(newData);
