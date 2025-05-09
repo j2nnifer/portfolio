@@ -10,43 +10,88 @@ const svg = d3.select('svg');
 const legend = d3.select('.legend');
 const colors = d3.scaleOrdinal(d3.schemeTableau10);
 
+let selectedIndex = -1;  // This will keep track of the selected slice index
+
 // Refactor all plotting into one function
 function renderPieChart(projectsGiven) {
   // Clear old pie chart and legend
   svg.selectAll('*').remove();
   legend.selectAll('*').remove();
 
-  // re-calculate rolled data
+  // Re-calculate rolled data
   let newRolledData = d3.rollups(
     projectsGiven,
     (v) => v.length,
     (d) => d.year,
   );
 
-  // re-calculate data
+  // Re-calculate data
   let newData = newRolledData.map(([year, count]) => {
     return { label: year, value: count };
   });
 
-  // re-calculate slice generator, arc data, arc, etc.
+  // Re-calculate slice generator, arc data, arc, etc.
   let newSliceGenerator = d3.pie().value(d => d.value);
   let newArcData = newSliceGenerator(newData);
   let arcGenerator = d3.arc().innerRadius(0).outerRadius(50);
 
-  // update paths
+  // Update paths (pie slices)
   svg.selectAll('path')
     .data(newArcData)
     .enter()
     .append('path')
     .attr('d', arcGenerator)
-    .attr('fill', (_, i) => colors(i));
+    .attr('fill', (_, i) => colors(i))
+    .style('cursor', 'pointer')
+    .on('click', (event, d, i) => {
+      // Toggle selected index (select/deselect on click)
+      selectedIndex = selectedIndex === i ? -1 : i;
 
-  // update legend
+      // Update styles for slices and legend
+      updateStyles(newData);
+       // Filter and render projects based on selected wedge
+       if (selectedIndex === -1) {
+        renderProjects(projects, projectsContainer, 'h2');
+      } else {
+        const selectedYear = newData[selectedIndex].label;
+        const filteredProjects = projects.filter(project => project.year === selectedYear);
+        renderProjects(filteredProjects, projectsContainer, 'h2');
+      }
+
+      // Re-render the pie chart and legend
+      renderPieChart(projects);
+    });
+
+    
+
+  // Update legend
   newData.forEach((d, i) => {
     legend.append('li')
       .attr('style', `--color:${colors(i)}`)
-      .html(`<span class="swatch"></span> ${d.label} <em>(${d.value})</em>`);
+      .html(`<span class="swatch"></span> ${d.label} <em>(${d.value})</em>`)
+      .style('cursor', 'pointer')
+      .on('click', (event, d, i) => {
+        // Toggle selected index (select/deselect on click)
+        selectedIndex = selectedIndex === i ? -1 : i;
+
+        // Update styles for slices and legend
+        updateStyles(newData);
+      });
   });
+
+  // Apply initial styles (opacity and selected class)
+  updateStyles(newData);
+}
+
+// Utility to update slice/legend highlighting
+function updateStyles(data) {
+  // Update pie slice opacity
+  svg.selectAll('path')
+    .style('opacity', (_, i) => (selectedIndex === -1 || i === selectedIndex ? 1 : 0.5));
+
+  // Update legend highlighting
+  legend.selectAll('li')
+    .attr('class', (_, i) => (i === selectedIndex ? 'selected' : ''));
 }
 
 // Call this function on page load
