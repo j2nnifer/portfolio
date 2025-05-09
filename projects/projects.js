@@ -10,102 +10,94 @@ const svg = d3.select('svg');
 const legend = d3.select('.legend');
 const colors = d3.scaleOrdinal(d3.schemeTableau10);
 
-let selectedIndex = -1;  // This will keep track of the selected slice index
+let selectedIndex = -1; // Tracks selected wedge
 
-// Refactor all plotting into one function
 function renderPieChart(projectsGiven) {
-  // Clear old pie chart and legend
   svg.selectAll('*').remove();
   legend.selectAll('*').remove();
 
-  // Re-calculate rolled data
-  let newRolledData = d3.rollups(
-    projectsGiven,
-    (v) => v.length,
-    (d) => d.year,
-  );
+  const newRolledData = d3.rollups(projectsGiven, v => v.length, d => d.year);
+  const newData = newRolledData.map(([year, count]) => ({ label: year, value: count }));
 
-  // Re-calculate data
-  let newData = newRolledData.map(([year, count]) => {
-    return { label: year, value: count };
-  });
+  const pie = d3.pie().value(d => d.value);
+  const arcData = pie(newData);
+  const arc = d3.arc().innerRadius(0).outerRadius(50);
 
-  // Re-calculate slice generator, arc data, arc, etc.
-  let newSliceGenerator = d3.pie().value(d => d.value);
-  let newArcData = newSliceGenerator(newData);
-  let arcGenerator = d3.arc().innerRadius(0).outerRadius(50);
-
-  // Update paths (pie slices)
+  // Render or update wedges
   svg.selectAll('path')
-    .data(newArcData)
-    .enter()
-    .append('path')
-    .attr('d', arcGenerator)
+    .data(arcData)
+    .join(
+      enter => enter.append('path')
+        .attr('d', arc)
+        .attr('fill', (_, i) => colors(i))
+        .style('cursor', 'pointer')
+        .on('click', function (event, d) {
+          const i = arcData.indexOf(d);
+          selectedIndex = selectedIndex === i ? -1 : i;
+          updateStyles(newData);
+
+          if (selectedIndex === -1) {
+            renderProjects(projects, projectsContainer, 'h2');
+          } else {
+            const selectedYear = newData[selectedIndex].label;
+            const filtered = projects.filter(p => p.year === selectedYear);
+            renderProjects(filtered, projectsContainer, 'h2');
+          }
+        }),
+      update => update,
+      exit => exit.remove()
+    )
+    .attr('d', arc)
     .attr('fill', (_, i) => colors(i))
-    .style('cursor', 'pointer')
-    .on('click', function (event, d) {
-      const i = newArcData.indexOf(d); // Get index based on data
-      selectedIndex = selectedIndex === i ? -1 : i;
-      updateStyles(newData);
-    
-      if (selectedIndex === -1) {
-        renderProjects(projects, projectsContainer, 'h2');
-      } else {
-        const selectedYear = newData[selectedIndex].label;
-        const filteredProjects = projects.filter(project => project.year === selectedYear);
-        renderProjects(filteredProjects, projectsContainer, 'h2');
-      }
-    });
+    .attr('class', (_, i) => (i === selectedIndex ? 'selected' : ''))
+    .style('opacity', (_, i) => (selectedIndex === -1 || i === selectedIndex ? 1 : 0.5));
 
-    
-
-  // Update legend
+  // Render legend
   newData.forEach((d, i) => {
     legend.append('li')
       .attr('style', `--color:${colors(i)}`)
       .html(`<span class="swatch"></span> ${d.label} <em>(${d.value})</em>`)
       .style('cursor', 'pointer')
-      .on('click', function (event, d) {
-        const i = newData.indexOf(d);
+      .on('click', () => {
         selectedIndex = selectedIndex === i ? -1 : i;
         updateStyles(newData);
-      
+
         if (selectedIndex === -1) {
           renderProjects(projects, projectsContainer, 'h2');
         } else {
           const selectedYear = newData[selectedIndex].label;
-          const filteredProjects = projects.filter(project => project.year === selectedYear);
-          renderProjects(filteredProjects, projectsContainer, 'h2');
+          const filtered = projects.filter(p => p.year === selectedYear);
+          renderProjects(filtered, projectsContainer, 'h2');
         }
       });
   });
 
-  // Apply initial styles (opacity and selected class)
   updateStyles(newData);
 }
 
-// Utility to update slice/legend highlighting
+// Utility to update styles of wedges and legend
 function updateStyles(data) {
   svg.selectAll('path')
-    .style('opacity', (_, i) => (selectedIndex === -1 || i === selectedIndex ? 1 : 0.5))
-    .attr('class', (_, i) => (i === selectedIndex ? 'selected' : ''));
+    .attr('class', (_, i) => (i === selectedIndex ? 'selected' : ''))
+    .style('opacity', (_, i) => (selectedIndex === -1 || i === selectedIndex ? 1 : 0.5));
 
   legend.selectAll('li')
     .attr('class', (_, i) => (i === selectedIndex ? 'selected' : ''));
 }
 
-// Call this function on page load
+// Initial render
 renderProjects(projects, projectsContainer, 'h2');
 renderPieChart(projects);
 
-// Filter and render on input
+// Handle search filtering
 const searchInput = document.querySelector('.searchBar');
 searchInput.addEventListener('change', (event) => {
-  let filteredProjects = projects.filter(project => {
-    let values = Object.values(project).join('\n').toLowerCase();
+  const filtered = projects.filter(project => {
+    const values = Object.values(project).join('\n').toLowerCase();
     return values.includes(event.target.value.toLowerCase());
   });
 
-  renderProjects(filteredProjects, projectsContainer, 'h2');
-  renderPieChart(filteredProjects);
+  selectedIndex = -1; // Clear selection on search
+  renderProjects(filtered, projectsContainer, 'h2');
+  renderPieChart(filtered);
 });

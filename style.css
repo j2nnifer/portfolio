@@ -187,33 +187,19 @@ label {
   gap: 1.5em; 
   align-items: center
 }
-
-&:has(path:hover) {
-  path:not(:hover) {
-    opacity: 0.5;
-  }
-}
-
-path {
-  transition: 300ms;
-}
-
-.selected {
-  --color: oklch(60% 45% 0) !important;
-
-  &:is(path) {
-    fill: var(--color);
-  }
-}
-
-path.selected {
-  stroke: #000;  /* Optional: highlight selected slice with a border */
-  stroke-width: 2px;
-}
-
 path {
   cursor: pointer;
   transition: opacity 0.3s ease, stroke 0.3s ease;
+}
+
+path.selected {
+  fill: oklch(60% 45% 0);
+  stroke: #000;
+  stroke-width: 2px;
+}
+
+svg:hover path:not(:hover) {
+  opacity: 0.5;
 }
 
 .legend li {
@@ -223,5 +209,5 @@ path {
 
 .legend li.selected {
   font-weight: bold;
-  background-color: rgba(0, 0, 0, 0.05); /* optional highlight */
+  background-color: rgba(0, 0, 0, 0.05);
 }
