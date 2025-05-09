@@ -193,7 +193,7 @@ path {
 }
 
 path.selected {
-  fill: oklch(60% 45% 0);
+  fill: plum;
   stroke: #000;
   stroke-width: 2px;
 }
