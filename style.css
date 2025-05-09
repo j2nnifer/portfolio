@@ -206,6 +206,21 @@ path {
   }
 }
 
+path.selected {
+  stroke: #000;  /* Optional: highlight selected slice with a border */
+  stroke-width: 2px;
+}
+
+path {
+  cursor: pointer;
+  transition: opacity 0.3s ease, stroke 0.3s ease;
+}
+
+.legend li {
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
 .legend li.selected {
   font-weight: bold;
   background-color: rgba(0, 0, 0, 0.05); /* optional highlight */

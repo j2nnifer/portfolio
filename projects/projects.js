@@ -43,14 +43,12 @@ function renderPieChart(projectsGiven) {
     .attr('d', arcGenerator)
     .attr('fill', (_, i) => colors(i))
     .style('cursor', 'pointer')
-    .on('click', (event, d, i) => {
-      // Toggle selected index (select/deselect on click)
+    .on('click', function (event, d) {
+      const i = newArcData.indexOf(d); // Get index based on data
       selectedIndex = selectedIndex === i ? -1 : i;
-
-      // Update styles for slices and legend
       updateStyles(newData);
-       // Filter and render projects based on selected wedge
-       if (selectedIndex === -1) {
+    
+      if (selectedIndex === -1) {
         renderProjects(projects, projectsContainer, 'h2');
       } else {
         const selectedYear = newData[selectedIndex].label;
@@ -67,12 +65,18 @@ function renderPieChart(projectsGiven) {
       .attr('style', `--color:${colors(i)}`)
       .html(`<span class="swatch"></span> ${d.label} <em>(${d.value})</em>`)
       .style('cursor', 'pointer')
-      .on('click', (event, d, i) => {
-        // Toggle selected index (select/deselect on click)
+      .on('click', function (event, d) {
+        const i = newData.indexOf(d);
         selectedIndex = selectedIndex === i ? -1 : i;
-
-        // Update styles for slices and legend
         updateStyles(newData);
+      
+        if (selectedIndex === -1) {
+          renderProjects(projects, projectsContainer, 'h2');
+        } else {
+          const selectedYear = newData[selectedIndex].label;
+          const filteredProjects = projects.filter(project => project.year === selectedYear);
+          renderProjects(filteredProjects, projectsContainer, 'h2');
+        }
       });
   });
 
@@ -82,11 +86,10 @@ function renderPieChart(projectsGiven) {
 
 // Utility to update slice/legend highlighting
 function updateStyles(data) {
-  // Update pie slice opacity
   svg.selectAll('path')
-    .style('opacity', (_, i) => (selectedIndex === -1 || i === selectedIndex ? 1 : 0.5));
+    .style('opacity', (_, i) => (selectedIndex === -1 || i === selectedIndex ? 1 : 0.5))
+    .attr('class', (_, i) => (i === selectedIndex ? 'selected' : ''));
 
-  // Update legend highlighting
   legend.selectAll('li')
     .attr('class', (_, i) => (i === selectedIndex ? 'selected' : ''));
 }
