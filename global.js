@@ -13,6 +13,7 @@ const BASE_PATH = (location.hostname === "localhost" || location.hostname === "1
     { url: 'projects/', title: 'project' },
     { url: 'contact/', title: 'contact' },
     { url: 'resume/', title: 'resume' },
+    { url: 'meta/', title: 'meta' },
     { url: 'https://github.com/j2nnifer', title: 'github', target: '_blank' }
   ];
 
