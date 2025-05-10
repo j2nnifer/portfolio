@@ -13,6 +13,9 @@ async function loadData() {
     return data;
 }
 
+let xScale;
+let yScale;
+
 function processCommits(data) {
     return d3
       .groups(data, (d) => d.commit)
@@ -81,6 +84,11 @@ function renderCommitInfo(data, commits) {
     dl.append('dt').text('Most work done');
     dl.append('dd').text(mostCommonTime);
 }
+
+let data = await loadData();
+
+let commits = processCommits(data);
+
 
 function renderSelectionCount(selection) {
     const selectedCommits = selection
@@ -152,13 +160,13 @@ function renderScatterPlot(data, commits) {
   
   
     // Scales
-    const xScale = d3
+    xScale = d3
       .scaleTime()
       .domain(d3.extent(commits, (d) => d.datetime))
       .range([usableArea.left, usableArea.right])
       .nice();
   
-    const yScale = d3.scaleLinear().domain([0, 24]).range([usableArea.bottom, usableArea.top]);
+    yScale = d3.scaleLinear().domain([0, 24]).range([usableArea.bottom, usableArea.top]);
   
     const [minLines, maxLines] = d3.extent(commits, (d) => d.totalLines);
     const rScale = d3
@@ -235,8 +243,6 @@ function updateTooltipPosition(event) {
 }
 
 // Load and process data
-let data = await loadData();
-let commits = processCommits(data);
 
 renderCommitInfo(data, commits);
 renderScatterPlot(data, commits);
