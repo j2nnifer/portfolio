@@ -86,6 +86,28 @@ function processCommits(data) {
     dl.append('dd').text(mostCommonTime);
   }
 
+  
+    function createBrushSelector(svg) {
+        svg.call(d3.brush());
+    }
+
+  // Function to handle brushing
+    function brushed(event) {
+        const selection = event.selection;
+        d3.selectAll('circle').classed('selected', (d) => isCommitSelected(selection, d));
+    }
+
+    // Function to check if commit is inside the brush selection
+    function isCommitSelected(selection, commit) {
+        if (!selection) return false;
+
+        const [[x0, y0], [x1, y1]] = selection;
+        const x = xScale(commit.datetime);
+        const y = yScale(commit.hourFrac);
+
+        return x0 <= x && x <= x1 && y0 <= y && y <= y1;
+    }
+
   function renderScatterPlot(data, commits) {
     const width = 1000;
     const height = 600;
@@ -109,6 +131,11 @@ function processCommits(data) {
       .attr('viewBox', `0 0 ${width} ${height}`)
       .style('overflow', 'visible');
   
+
+
+
+    svg.selectAll('.dots, .overlay ~ *').raise();
+
     // Scales
     const xScale = d3
       .scaleTime()
@@ -174,6 +201,7 @@ function processCommits(data) {
       .append('g')
       .attr('transform', `translate(${usableArea.left}, 0)`)
       .call(yAxis);
+
   }
 
   function renderTooltipContent(commit) {
