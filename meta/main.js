@@ -119,8 +119,10 @@ function processCommits(data) {
     const yScale = d3.scaleLinear().domain([0, 24]).range([usableArea.bottom, usableArea.top]);
 
     const [minLines, maxLines] = d3.extent(commits, (d) => d.totalLines);
-    const rScale = d3.scaleLinear().domain([minLines, maxLines]).range([3, 28]); // adjust these values based on your experimentation
-
+    const rScale = d3
+    .scaleSqrt() // Change only this line
+    .domain([minLines, maxLines])
+    .range([3, 28]);
     const dots = svg.append('g').attr('class', 'dots');
 
   
@@ -131,6 +133,7 @@ function processCommits(data) {
     .attr('cx', (d) => xScale(d.datetime))
     .attr('cy', (d) => yScale(d.hourFrac))
     .attr('r', (d) => rScale(d.totalLines))
+    .attr('fill', 'steelblue')
     .style('fill-opacity', 0.7) // Add transparency for overlapping dots
     .on('mouseenter', (event, commit) => {
         d3.select(event.currentTarget).style('fill-opacity', 1); // Full opacity on hover
