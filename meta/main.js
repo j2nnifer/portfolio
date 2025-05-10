@@ -86,9 +86,26 @@ function createBrushSelector(svg) {
     svg.call(d3.brush().on('brush', brushed));
 }
 
+function renderSelectionCount(selection) {
+    const selectedCommits = selection
+      ? commits.filter((d) => isCommitSelected(selection, d))
+      : [];
+  
+    const countElement = document.querySelector('#selection-count');
+    countElement.textContent = `${
+      selectedCommits.length || 'No'
+    } commits selected`;
+  
+    return selectedCommits;
+  }
+
 // Function to handle brushing
 function brushed(event) {
     const selection = event.selection;
+
+    // Update the selection count
+    const selectedCommits = renderSelectionCount(selection);
+    
     d3.selectAll('circle').classed('selected', (d) => isCommitSelected(selection, d));
 }
 
@@ -102,6 +119,7 @@ function isCommitSelected(selection, commit) {
 
     return x0 <= x && x <= x1 && y0 <= y && y <= y1;
 }
+
 
 function renderScatterPlot(data, commits) {
     const width = 1000;
