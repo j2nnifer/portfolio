@@ -82,10 +82,6 @@ function renderCommitInfo(data, commits) {
     dl.append('dd').text(mostCommonTime);
 }
 
-function createBrushSelector(svg) {
-    svg.call(d3.brush().on('brush', brushed));
-}
-
 function renderSelectionCount(selection) {
     const selectedCommits = selection
       ? commits.filter((d) => isCommitSelected(selection, d))
@@ -99,21 +95,31 @@ function renderSelectionCount(selection) {
     return selectedCommits;
   }
 
+
+function createBrushSelector(svg) {
+    svg.call(d3.brush().on('brush', brushed));
+
+    svg.selectAll('.dots, .overlay ~ *').raise();
+}
+
+
 // Function to handle brushing
 function brushed(event) {
     const selection = event.selection;
 
-    // Update the selection count
-    const selectedCommits = renderSelectionCount(selection);
     
     d3.selectAll('circle').classed('selected', (d) => isCommitSelected(selection, d));
+    renderSelectionCount(selection);
+
+
 }
 
 // Function to check if commit is inside the brush selection
 function isCommitSelected(selection, commit) {
     if (!selection) return false;
 
-    const [[x0, y0], [x1, y1]] = selection;
+    const [x0, x1] = selection.map((d) => d[0]);
+    const [y0, y1] = selection.map((d) => d[1]);
     const x = xScale(commit.datetime);  // xScale is now passed as a parameter
     const y = yScale(commit.hourFrac);  // yScale is now passed as a parameter
 
@@ -144,7 +150,6 @@ function renderScatterPlot(data, commits) {
       .attr('viewBox', `0 0 ${width} ${height}`)
       .style('overflow', 'visible');
   
-    svg.selectAll('.dots, .overlay ~ *').raise();
   
     // Scales
     const xScale = d3
