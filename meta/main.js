@@ -41,7 +41,7 @@ function processCommits(data) {
         return ret;
       });
   }
-  
+
   function renderCommitInfo(data, commits) {
     const dl = d3.select('#stats').append('dl').attr('class', 'stats');
   
@@ -87,5 +87,6 @@ function processCommits(data) {
   }
 
 let data = await loadData();
-let commits = d3.groups(data, (d) => d.commit);
-console.log(commits);
+let commits = processCommits(data);
+
+renderCommitInfo(data, commits);
