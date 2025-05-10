@@ -121,6 +121,8 @@ function processCommits(data) {
     const [minLines, maxLines] = d3.extent(commits, (d) => d.totalLines);
     const rScale = d3.scaleLinear().domain([minLines, maxLines]).range([3, 28]); // adjust these values based on your experimentation
 
+    const dots = svg.append('g').attr('class', 'dots');
+
   
     dots
     .selectAll('circle')
@@ -151,7 +153,6 @@ function processCommits(data) {
     gridlines.call(d3.axisLeft(yScale).tickFormat('').tickSize(-usableArea.width));
   
     // Plot the dots (commits)
-    const dots = svg.append('g').attr('class', 'dots');
     dots
       .selectAll('circle')
       .data(commits)
