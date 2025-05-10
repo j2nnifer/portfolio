@@ -237,3 +237,13 @@ svg:hover path:not(:hover) {
   color: plum;
   margin: 0;
 }
+
+.gridlines path {
+  stroke: lightgray;   /* Change color to light gray */
+  stroke-width: 0.5;   /* Reduce stroke width */
+}
+
+.gridlines line {
+  stroke: lightgray;   /* Change color to light gray */
+  stroke-width: 0.5;   /* Reduce stroke width */
+}
