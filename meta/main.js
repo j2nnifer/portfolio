@@ -86,71 +86,169 @@ function processCommits(data) {
     dl.append('dd').text(mostCommonTime);
   }
 
+  function renderSelectionCount(selection) {
+    const selectedCommits = selection
+      ? commits.filter((d) => isCommitSelected(selection, d))
+      : [];
+  
+    const countElement = document.querySelector("#selection-count");
+    countElement.textContent = `${
+      selectedCommits.length || "No"
+    } commits selected`;
+  
+    return selectedCommits;
+  }
+  
+  function createBrushSelector(svg) {
+    svg.call(d3.brush().on("start brush end", brushed));
+  
+    svg.selectAll(".dots, .overlay ~ *").raise();
+  }
+  
+  function brushed(event) {
+    console.log(event);
+    const selection = event.selection;
+    d3.selectAll("circle").classed("selected", (d) =>
+      isCommitSelected(selection, d)
+    );
+    renderSelectionCount(selection);
+    renderLanguageBreakdown(selection);
+  }
+  
+  function isCommitSelected(selection, commit) {
+    if (!selection) return false;
+  
+    const [x0, x1] = selection.map((d) => d[0]);
+    const [y0, y1] = selection.map((d) => d[1]);
+    const x = xScale(commit.datetime);
+    const y = yScale(commit.hourFrac);
+  
+    return x >= x0 && x <= x1 && y >= y0 && y <= y1;
+  }
+  
+  function renderTooltipContent(commit) {
+    const link = document.getElementById("commit-link");
+    const date = document.getElementById("commit-date");
+  
+    if (Object.keys(commit).length === 0) return;
+  
+    link.href = commit.url;
+    link.textContent = commit.id;
+    date.textContent = commit.datetime?.toLocaleString("en", {
+      dateStyle: "full",
+    });
+  }
+  
   function renderScatterPlot(data, commits) {
-    // Put all the JS code of Steps inside this function
     const width = 1000;
     const height = 600;
-
+  
     const svg = d3
-        .select('#chart')
-        .append('svg')
-        .attr('viewBox', `0 0 ${width} ${height}`)
-        .style('overflow', 'visible');
-
-    const xScale = d3
-        .scaleTime()
-        .domain(d3.extent(commits, (d) => d.datetime))
-        .range([0, width])
-        .nice();
-
-    const yScale = d3.scaleLinear().domain([0, 24]).range([height, 0]);
-
-    const dots = svg.append('g').attr('class', 'dots');
-
-    dots
-        .selectAll('circle')
-        .data(commits)
-        .join('circle')
-        .attr('cx', (d) => xScale(d.datetime))
-        .attr('cy', (d) => yScale(d.hourFrac))
-        .attr('r', 5)
-        .attr('fill', 'steelblue');
-
+      .select("#chart")
+      .append("svg")
+      .attr("viewBox", `0 0 ${width} ${height}`)
+      .style("overflow", "visible"); // Keep this if you want effects like hover scale to be fully visible
+  
+    // Define margins and usable area FIRST
     const margin = { top: 10, right: 10, bottom: 30, left: 20 };
-
     const usableArea = {
-        top: margin.top,
-        right: width - margin.right,
-        bottom: height - margin.bottom,
-        left: margin.left,
-        width: width - margin.left - margin.right,
-        height: height - margin.top - margin.bottom,
-      };
-      
-      // Update scales with new ranges
-      xScale.range([usableArea.left, usableArea.right]);
-      yScale.range([usableArea.bottom, usableArea.top]);
-
-    // Create the axes
+      top: margin.top,
+      right: width - margin.right,
+      bottom: height - margin.bottom,
+      left: margin.left,
+      width: width - margin.left - margin.right,
+      height: height - margin.top - margin.bottom,
+    };
+  
+    // Set up scales with the CORRECT ranges based on usableArea
+    xScale = d3
+      .scaleTime()
+      .domain(d3.extent(commits, (d) => d.datetime))
+      .range([usableArea.left, usableArea.right]) // Use usableArea range
+      .nice();
+  
+    yScale = d3
+      .scaleLinear()
+      .domain([0, 24])
+      .range([usableArea.bottom, usableArea.top]); // Use usableArea range (bottom to top for y-axis)
+  
+    const dots = svg.append("g").attr("class", "dots");
+  
+    const [minLines, maxLines] = d3.extent(commits, (d) => d.totalLines);
+    const rScale = d3.scaleSqrt().domain([minLines, maxLines]).range([2, 30]);
+    const sortedCommits = d3.sort(commits, (d) => -d.totalLines);
+  
+    // Now draw the dots using the correctly defined scales
+    dots
+      .selectAll("circle")
+      .data(sortedCommits)
+      .join("circle")
+      .attr("cx", (d) => xScale(d.datetime))
+      .attr("cy", (d) => yScale(d.hourFrac))
+      .attr("fill", "steelblue")
+      .attr("r", (d) => rScale(d.totalLines))
+      .style("fill-opacity", 0.7)
+      .on("mouseenter", (event, commit) => {
+        // 1. Clear any existing timeout to prevent premature hiding
+        clearTimeout(hideTooltipTimeout);
+  
+        // 2. Highlight the dot and show/update tooltip content
+        d3.select(event.currentTarget).style("fill-opacity", 1);
+        renderTooltipContent(commit);
+        updateTooltipVisibility(true); // Show the tooltip
+        updateTooltipPosition(event);
+      })
+      .on("mouseleave", (event) => {
+        // 1. Unhighlight the dot
+        d3.select(event.currentTarget).style("fill-opacity", 0.7);
+  
+        // 2. Set a timeout to hide the tooltip after a delay
+        clearTimeout(hideTooltipTimeout); // Clear any existing timeout first
+        hideTooltipTimeout = setTimeout(() => {
+          updateTooltipVisibility(false); // Hide the tooltip
+        }, 300); // Delay in milliseconds (e.g., 300ms). Adjust as needed.
+      });
+  
+    // Add gridlines BEFORE the axes
+    const gridlines = svg
+      .append("g")
+      .attr("class", "gridlines")
+      // Position gridlines based on usableArea if they are only for the y-axis
+      // If you want x-gridlines too, you'll need another set or adjust this.
+      // For y-gridlines that span the usable width:
+      .attr("transform", `translate(0, 0)`); // Gridlines will be drawn relative to SVG origin
+  
+    // Create y-gridlines
+    gridlines
+      .call(
+        d3
+          .axisLeft(yScale)
+          .tickFormat("")
+          .tickSize(-usableArea.width) // Make ticks span the usable width
+          .ticks(yScale.ticks().length) // Or specify number of ticks
+      )
+      .attr("transform", `translate(${usableArea.left},0)`); // Shift the gridlines group to start at usableArea.left
+  
     const xAxis = d3.axisBottom(xScale);
-    const yAxis = d3
-    .axisLeft(yScale)
-    .tickFormat((d) => String(d % 24).padStart(2, '0') + ':00');
-    
+  
     // Add X axis
     svg
-    .append('g')
-    .attr('transform', `translate(0, ${usableArea.bottom})`)
-    .call(xAxis);
-
+      .append("g")
+      .attr("transform", `translate(0, ${usableArea.bottom})`)
+      .call(xAxis);
+  
+    const yAxis = d3
+      .axisLeft(yScale)
+      .tickFormat((d) => String(d % 24).padStart(2, "0") + ":00");
+  
     // Add Y axis
     svg
-    .append('g')
-    .attr('transform', `translate(${usableArea.left}, 0)`)
-    .call(yAxis);
-
-    
-   }
+      .append("g")
+      .attr("transform", `translate(${usableArea.left}, 0)`)
+      .call(yAxis);
+  
+    createBrushSelector(svg);
+  }
 
 let data = await loadData();
 let commits = processCommits(data);
