@@ -87,6 +87,7 @@ function processCommits(data) {
   }
 
   function renderScatterPlot(data, commits) {
+    // Put all the JS code of Steps inside this function
     const width = 1000;
     const height = 600;
 
@@ -96,51 +97,26 @@ function processCommits(data) {
         .attr('viewBox', `0 0 ${width} ${height}`)
         .style('overflow', 'visible');
 
-    // Ensure commits has datetime and hourFrac
-    console.log('Commits for scatter plot:', commits);
-
     const xScale = d3
         .scaleTime()
-        .domain(d3.extent(commits, (d) => d.datetime))  // Ensure commits have datetime field
+        .domain(d3.extent(commits, (d) => d.datetime))
         .range([0, width])
         .nice();
 
-    const yScale = d3.scaleLinear()
-        .domain([0, 24])  // 24-hour scale for hours
-        .range([height, 0]);
+    const yScale = d3.scaleLinear().domain([0, 24]).range([height, 0]);
 
     const dots = svg.append('g').attr('class', 'dots');
 
-    // Bind the commits to the circles and set attributes
     dots
         .selectAll('circle')
         .data(commits)
         .join('circle')
-        .attr('cx', (d) => xScale(d.datetime))  // Position by datetime
-        .attr('cy', (d) => yScale(d.hourFrac))  // Position by hourFrac
+        .attr('cx', (d) => xScale(d.datetime))
+        .attr('cy', (d) => yScale(d.hourFrac))
         .attr('r', 5)
-        .attr('fill', 'steelblue')
-        .on('mouseenter', (event, commit) => {
-            console.log('Hovered Commit:', commit);  // Log commit data when hovering
-        })
-        .on('mouseleave', (event) => {
-            console.log('Mouse leave event');  // Log when the mouse leaves
-        });
+        .attr('fill', 'steelblue');
 
-    // Add x-axis (Time)
-    const xAxis = d3.axisBottom(xScale).ticks(6);
-    svg
-        .append('g')
-        .attr('transform', `translate(0, ${height - 30})`)
-        .call(xAxis);
-
-    // Add y-axis (Hour of Day)
-    const yAxis = d3.axisLeft(yScale).tickFormat((d) => String(d % 24).padStart(2, '0') + ':00');
-    svg
-        .append('g')
-        .attr('transform', 'translate(30, 0)')  // Position y-axis with a little margin
-        .call(yAxis);
-}
+   }
 
 let data = await loadData();
 let commits = processCommits(data);
