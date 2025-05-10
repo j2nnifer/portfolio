@@ -152,16 +152,6 @@ function processCommits(data) {
     // Create gridlines as an axis with no labels and full-width ticks
     gridlines.call(d3.axisLeft(yScale).tickFormat('').tickSize(-usableArea.width));
   
-    // Plot the dots (commits)
-    dots
-      .selectAll('circle')
-      .data(commits)
-      .join('circle')
-      .attr('cx', (d) => xScale(d.datetime))
-      .attr('cy', (d) => yScale(d.hourFrac))
-      .attr('r', 5)
-      .attr('fill', 'steelblue');
-  
     // X and Y Axes
     const xAxis = d3.axisBottom(xScale);
     const yAxis = d3
