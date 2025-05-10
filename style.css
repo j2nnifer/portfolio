@@ -227,7 +227,7 @@ svg:hover path:not(:hover) {
 .stats dt {
   font-size: 0.9rem;
   font-weight: 600;
-  color: purple;
+  color: black;
   margin-bottom: 0.25rem;
 }
 
