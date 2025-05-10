@@ -123,7 +123,7 @@ function processCommits(data) {
         .attr('transform', `translate(${usableArea.left}, 0)`);
 
     // Create gridlines as an axis with no labels and full-width ticks
-gridlines.call(d3.axisLeft(yScale).tickFormat('').tickSize(-usableArea.width));
+    gridlines.call(d3.axisLeft(yScale).tickFormat('').tickSize(-usableArea.width));
 
     const margin = { top: 10, right: 10, bottom: 30, left: 20 };
 
