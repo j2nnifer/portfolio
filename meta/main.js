@@ -124,11 +124,13 @@ function processCommits(data) {
     .domain([minLines, maxLines])
     .range([3, 28]);
     const dots = svg.append('g').attr('class', 'dots');
+    const sortedCommits = d3.sort(commits, (d) => -d.totalLines);
+
 
   
     dots
     .selectAll('circle')
-    .data(commits)
+    .data(sortedCommits)
     .join('circle')
     .attr('cx', (d) => xScale(d.datetime))
     .attr('cy', (d) => yScale(d.hourFrac))
