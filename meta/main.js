@@ -46,7 +46,7 @@ function processCommits(data) {
     const dl = d3.select('#stats').append('dl').attr('class', 'stats');
   
     // Total lines of code
-    dl.append('dt').html('Total <abbr title="Lines of code">LOC</abbr>');
+    dl.append('dt').html('Total Lines');
     dl.append('dd').text(data.length);
   
     // Total commits
