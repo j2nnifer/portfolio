@@ -41,6 +41,50 @@ function processCommits(data) {
         return ret;
       });
   }
+  
+  function renderCommitInfo(data, commits) {
+    const dl = d3.select('#stats').append('dl').attr('class', 'stats');
+  
+    // Total lines of code
+    dl.append('dt').html('Total <abbr title="Lines of code">LOC</abbr>');
+    dl.append('dd').text(data.length);
+  
+    // Total commits
+    dl.append('dt').text('Total commits');
+    dl.append('dd').text(commits.length);
+  
+    // Number of files
+    const files = d3.groups(data, d => d.file);
+    dl.append('dt').text('Number of files');
+    dl.append('dd').text(files.length);
+  
+    // Average file length
+    const avgFileLength = d3.mean(files, ([, lines]) => lines.length);
+    dl.append('dt').text('Average file length');
+    dl.append('dd').text(avgFileLength.toFixed(2));
+  
+    // Maximum file length
+    const maxFile = d3.max(files, ([, lines]) => lines.length);
+    dl.append('dt').text('Max file length');
+    dl.append('dd').text(maxFile);
+  
+    // Time of day most work is done
+    const timeBins = d3.rollup(
+      data,
+      v => v.length,
+      d => {
+        const hour = d.datetime.getHours();
+        if (hour >= 5 && hour < 12) return 'Morning';
+        if (hour >= 12 && hour < 17) return 'Afternoon';
+        if (hour >= 17 && hour < 21) return 'Evening';
+        return 'Night';
+      }
+    );
+    const mostCommonTime = Array.from(timeBins.entries()).sort((a, b) => d3.descending(a[1], b[1]))[0][0];
+  
+    dl.append('dt').text('Most work done');
+    dl.append('dd').text(mostCommonTime);
+  }
 
 let data = await loadData();
 let commits = d3.groups(data, (d) => d.commit);

@@ -211,3 +211,18 @@ svg:hover path:not(:hover) {
   font-weight: bold;
   background-color: rgba(0, 0, 0, 0.05);
 }
+
+.stats {
+  display: grid;
+  grid-template-columns: max-content auto;
+  gap: 0.25em 1em;
+  margin: 1em 0;
+}
+
+.stats dt {
+  font-weight: bold;
+}
+
+.stats dd {
+  margin: 0;
+}
