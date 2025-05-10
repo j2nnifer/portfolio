@@ -117,6 +117,10 @@ function processCommits(data) {
       .nice();
   
     const yScale = d3.scaleLinear().domain([0, 24]).range([usableArea.bottom, usableArea.top]);
+
+    const [minLines, maxLines] = d3.extent(commits, (d) => d.totalLines);
+    const rScale = d3.scaleLinear().domain([minLines, maxLines]).range([3, 28]); // adjust these values based on your experimentation
+
   
     dots
     .selectAll('circle')
@@ -124,14 +128,16 @@ function processCommits(data) {
     .join('circle')
     .attr('cx', (d) => xScale(d.datetime))
     .attr('cy', (d) => yScale(d.hourFrac))
-    .attr('r', 5)
-    .attr('fill', 'steelblue')
+    .attr('r', (d) => rScale(d.totalLines))
+    .style('fill-opacity', 0.7) // Add transparency for overlapping dots
     .on('mouseenter', (event, commit) => {
+        d3.select(event.currentTarget).style('fill-opacity', 1); // Full opacity on hover
         renderTooltipContent(commit);
         updateTooltipVisibility(true);
         updateTooltipPosition(event);
     })
-    .on('mouseleave', () => {
+      .on('mouseleave', (event) => {
+        d3.select(event.currentTarget).style('fill-opacity', 0.7);
         updateTooltipVisibility(false);
     });
 
