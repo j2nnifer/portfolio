@@ -10,10 +10,26 @@
 </head>
 <body>
     <h1>meta</h1>
+
+    <div style="display: flex; align-items: baseline; margin-bottom: 1em;">
+      <label for="commit-progress" style="flex: 1;">
+        Show commits until:
+        <input type="range" id="commit-progress" min="0" max="100" value="100" />
+      </label>
+      <time id="commit-time" style="margin-left: auto;"></time>
+    </div>
+
     <div id="stats"></div>
 
-    <h2>Commits by time of day</h2>
-    <div id="chart"></div>
+    
+    <div id="scrolly-1">
+      <div id="scatter-story">some filler text here</div>
+      <div id="scatter-plot">
+        <!-- old code -->
+        
+        <h2>Commits by time of day</h2>
+      <div id="chart"></div>
+
 
     <p id="selection-count">No commits selected</p>
 
@@ -31,6 +47,19 @@
 
     <dl id="language-breakdown" class="stats"></dl>
 
-      
+    <dl id="files"></dl>
+
+      </div>
+    </div>
+
+    <!-- we want to achieve this -->
+    <dd>
+      <div class="line"></div>
+    </dd>
+
+
+
+    
+    
 </body>
 </html>
